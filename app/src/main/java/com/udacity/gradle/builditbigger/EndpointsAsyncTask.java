@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 
 
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -23,9 +26,17 @@ import java.io.IOException;
 public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
     private static MyApi myApiService = null;
     public MainActivity mainActivity;
+    public SimpleIdlingResource mIdlingResource;
 
     public EndpointsAsyncTask(MainActivity activity) {
         mainActivity = activity;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        getIdlingResource();
+        mIdlingResource.setIdle(false);
+        super.onPreExecute();
     }
 
     @Override
@@ -63,6 +74,17 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
         intentJokeActivity.putExtra(JokeActivity.EXTRA_JOKE,result);
         if (mainActivity!=null && !mainActivity.isFinishing())
         mainActivity.startActivity(intentJokeActivity);
+        mIdlingResource.setIdle(true);
+    }
+
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
     }
 
 }
