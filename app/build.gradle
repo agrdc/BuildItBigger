@@ -39,7 +39,6 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.5'
     compile project(':showjokeslib')
     compile project(path: ':backend', configuration: 'android-endpoints')
-    compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
     compile 'com.android.support:appcompat-v7:25.0.0'
     freeCompile 'com.google.android.gms:play-services-ads:9.8.0'
 }
